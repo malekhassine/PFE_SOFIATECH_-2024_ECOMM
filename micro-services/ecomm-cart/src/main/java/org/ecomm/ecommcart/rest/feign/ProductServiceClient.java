@@ -8,8 +8,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-//@FeignClient(name = "product-service", url = "http://${host.url}:8081/api")
-@FeignClient(name = "product-service", path = "/api")
+@FeignClient(name = "product-service", url = "http://${host.url}:8081/api")
 public interface ProductServiceClient {
 
   @GetMapping("product")

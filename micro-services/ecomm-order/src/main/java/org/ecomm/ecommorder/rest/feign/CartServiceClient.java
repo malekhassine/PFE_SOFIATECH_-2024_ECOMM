@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-//@FeignClient(name = "cart-service", url = "http://${host.url}:8082/api/cart")
-@FeignClient(name = "cart-service", path = "/api/cart")
+@FeignClient(name = "cart-service", url = "http://${host.url}:8082/api/cart")
 public interface CartServiceClient {
 
   @GetMapping

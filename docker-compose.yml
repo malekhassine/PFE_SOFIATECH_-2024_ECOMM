@@ -3,13 +3,13 @@ version: "3.8"
 services:
   db:
     build:
-      context: ./infra/ecomm-db
+      context: ./infrastructure/ecomm-db
       dockerfile: Dockerfile
     ports:
       - "5432:5432"
     volumes:
       - postgres-ecomm-data:/var/lib/postgresql/data
-      - ./infra/ecomm-db/ecomm.sql:/docker-entrypoint-initdb.d/ecomm.sql
+      - ./infrastructure/ecomm-db/ecomm.sql:/docker-entrypoint-initdb.d/ecomm.sql
     env_file:
       - .env
     restart: unless-stopped
@@ -17,8 +17,6 @@ services:
   gateway:
     depends_on:
       - db
-      - config
-      - discovery
     build:
       context: ./edge-services/ecomm-gateway
       dockerfile: Dockerfile.local
@@ -26,32 +24,6 @@ services:
       - "8091:8091"
     env_file:
       - .env
-
-  config:
-    build:
-      context: ./edge-services/config-server
-      dockerfile: Dockerfile.local
-    container_name: config-server
-    ports:
-      - "8900:8900"
-    environment:
-      CONFIG_SERVER_GIT_REPO: https://github.com/MedEzzedine/Ecommerce-Microservices-Config.git
-      GITHUB_USERNAME: MedEzzedine
-      #GITHUB_REPO_ACCESS_TOKEN: <token or github password>
-    env_file:
-      - .env
-
-  discovery:
-    build:
-      context: ./edge-services/discovery-server
-      dockerfile: Dockerfile.local
-    container_name: discovery-server
-    ports:
-      - "9999:9999"
-    env_file:
-      - .env
-    depends_on:
-      - config
 
   user:
     build:
@@ -63,8 +35,6 @@ services:
       - .env
     depends_on:
       - db
-      - config
-      - discovery
 
   cart:
     build:
@@ -76,8 +46,6 @@ services:
       - .env
     depends_on:
       - db
-      - config
-      - discovery
 
   product:
     build:
@@ -92,8 +60,6 @@ services:
     depends_on:
       - db
       - redis
-      - config
-      - discovery
 
   order:
     build:
@@ -105,8 +71,6 @@ services:
       - .env
     depends_on:
       - db
-      - config
-      - discovery
 
   elasticsearch:
     image: elasticsearch:8.11.1
